@@ -4,14 +4,38 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Carbon\Carbon;
+
 class PostsController extends Controller
 {
 
   public function index() {
 
-    $posts = Post::orderBy('created_at', 'desc')->get();
+    // $posts = Post::latest()
+    //                   ->filter(request(['month', 'year']))
+    //                   ->get();
 
-    return view('posts.index', compact('posts'));
+    $posts = Post::orderBy('created_at', 'desc');
+
+    if ($month = request('month')) {
+      $posts->whereMonth('created_at', Carbon::parse($month)->month);
+    }
+
+    if ($year = request('year')) {
+      $posts->whereYear('created_at', $year);
+    }
+
+    $posts = $posts->get();
+
+    $archives = Post::selectRaw('year(`created_at`) year,monthname(`created_at`) month,count(*) published')
+      ->groupBy('year', 'month')
+      ->orderByRaw('min(created_at) desc')
+      ->get()
+      ->toArray();
+
+      //return $archives;
+
+    return view('posts.index', compact('posts', 'archives'));
   }
 
 
@@ -50,7 +74,11 @@ class PostsController extends Controller
 // other way to create the post using the request data  (it will ceated to you and save it too )
 // but you need to set up a Model
 
-    Post::create(request(['title', 'body']));
+    Post::create([
+      'title' => request('title'),
+      'body' => request('body'),
+      'user_id' => auth()->id()
+    ]);
 
     // redirect to the home page
     return redirect('/');

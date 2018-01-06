@@ -1,8 +1,10 @@
 <div class="blog-post">
-  <div class="col-sm-8 blog-main">
+  <div class="col-sm-9 blog-main">
     <a href="/posts/{{ $post->id }}" class="blog-post-title">{{ $post->title }}</a>
 
-    <p class="blog-post-meta">Published at: {{ $post->created_at->toFormattedDateString() }}</p>
+    <p class="blog-post-meta">
+      {{ $post->user->name }} on
+      {{ $post->created_at->toFormattedDateString() }}</p>
 
     <p>{{ $post->body }}</p>
 
@@ -16,6 +18,7 @@
         @foreach ($post->comments as $comment)
           <li class="list-group-item">
             <strong>
+               on
               {{ $comment->created_at->diffForHumans() }} : &nbsp;
             </strong>
             {{ $comment->body }}

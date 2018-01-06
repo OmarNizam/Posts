@@ -29,12 +29,12 @@
 
       <div class="row">
 
-      @yield('content')
+        @yield('content')
 
-      @include('layouts.sidebar')
-
+        @include('layouts.sidebar')
+      </div>
     </div>
-
+    
     @include('layouts.footer')
 
   </body>
