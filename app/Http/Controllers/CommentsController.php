@@ -17,6 +17,8 @@ class CommentsController extends Controller
       // Add a comment to a post
       $post->addComment([
         'body' => request('body'),
+
+        'user_id' => auth()->id()
       ]);   // you find this new method in the Post.php // pass throw the function the request body
 
       return back();  // redirect stay at the same page

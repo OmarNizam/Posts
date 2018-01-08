@@ -8,6 +8,10 @@ use Carbon\Carbon;
 
 class PostsController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('auth')->except(['index', 'show']);
+  }
 
   public function index() {
 
@@ -27,15 +31,11 @@ class PostsController extends Controller
 
     $posts = $posts->get();
 
-    $archives = Post::selectRaw('year(`created_at`) year,monthname(`created_at`) month,count(*) published')
-      ->groupBy('year', 'month')
-      ->orderByRaw('min(created_at) desc')
-      ->get()
-      ->toArray();
+
 
       //return $archives;
 
-    return view('posts.index', compact('posts', 'archives'));
+    return view('posts.index', compact('posts'));
   }
 
 
