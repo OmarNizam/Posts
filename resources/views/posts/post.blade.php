@@ -27,8 +27,9 @@
       </ul>
     </div>
 
-
+<hr />
   {{-- Add A Comment  --}}
+  
     <form method="post" action="/posts/{{ $post->id }}/comments">
       {{ csrf_field() }}
       <div class="form-group">
@@ -40,6 +41,7 @@
         </div>
       </div>
     </form>
+
 @include('layouts.errors')
   </div>
 </div>
